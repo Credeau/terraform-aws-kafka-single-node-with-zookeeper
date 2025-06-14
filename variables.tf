@@ -154,11 +154,11 @@ variable "disk_iops" {
 variable "disk_throughput" {
   type        = number
   description = "Throughput to provision in Kafka storage"
-  default     = 250
+  default     = 125
 
   validation {
-    condition     = var.disk_throughput >= 250 && var.disk_throughput <= 1000
-    error_message = "The disk_throughput value for a GP3 disk must be between 250 and 1000."
+    condition     = var.disk_throughput >= 125 && var.disk_throughput <= 1000
+    error_message = "The disk_throughput value for a GP3 disk must be between 125 and 1000."
   }
 }
 
