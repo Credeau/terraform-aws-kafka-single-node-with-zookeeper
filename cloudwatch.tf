@@ -34,7 +34,6 @@ resource "aws_cloudwatch_metric_alarm" "memory_usage" {
   }
 
   alarm_actions = [
-    aws_autoscaling_policy.upscale.arn,
     aws_sns_topic.alert_topic.arn
   ]
 }
