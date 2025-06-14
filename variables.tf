@@ -107,6 +107,24 @@ variable "ami_id" {
   default     = null
 }
 
+variable "cpu_threshold" {
+  type        = number
+  description = "CPU usage threshold for alerts"
+  default     = 60
+}
+
+variable "memory_threshold" {
+  type        = number
+  description = "Memory usage threshold for alerts"
+  default     = 60
+}
+
+variable "disk_threshold" {
+  type        = number
+  description = "Disk usage threshold for alerts"
+  default     = 60
+}
+
 # ----------------------------------------------
 # Storage Related Variables
 # ----------------------------------------------
