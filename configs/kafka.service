@@ -1,0 +1,22 @@
+[Unit]
+Description=Apache Kafka
+After=zookeeper.service
+
+[Service]
+Type=simple
+Environment="KAFKA_HEAP_OPTS=${kafka_heap_opts}"
+ExecStart=/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties \
+  --override log.retention.hours=12 \
+  --override log.retention.bytes=4294967296 \
+  --override num.network.threads=8 \
+  --override num.io.threads=8 \
+  --override queued.max.requests=1000 \
+  --override socket.request.max.bytes=104857600 \
+  --override message.max.bytes=2097152 \
+  --override replica.fetch.max.bytes=2097152
+ExecStop=/opt/kafka/bin/kafka-server-stop.sh
+User=ubuntu
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

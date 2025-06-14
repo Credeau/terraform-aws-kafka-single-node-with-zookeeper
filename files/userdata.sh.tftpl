@@ -1,0 +1,110 @@
+#!/bin/bash
+
+# -----------------------------------------------
+# Pre-Requisites
+# -----------------------------------------------
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+cd /home/ubuntu
+
+sudo apt update -y
+
+# Install tools required in the script ahead
+sudo apt install -y wget curl gpg gnupg net-tools unzip
+sudo apt install -y e2fsprogs coreutils python3 python3-pip cron
+sudo apt install openjdk-8-jdk -y
+
+# Install AWS CLI
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+echo "✅ Pre-Requisites are met"
+
+# -----------------------------------------------
+# Install & Configure Kafka
+# -----------------------------------------------
+
+# Download & Extract kafka setup files
+wget https://dlcdn.apache.org/kafka/3.8.0/kafka_2.13-3.8.0.tgz
+tar -xzf kafka_2.13-3.8.0.tgz
+
+cd kafka_2.13-3.8.0/
+
+# Start Zookeeper
+bin/zookeeper-server-start.sh config/zookeeper.properties &> /home/ubuntu/zookeeper.logs &
+
+# -----------------------------------------------
+# Kafka Configuration Tips
+# -----------------------------------------------
+# Storage:
+#   Total log size ≈ number of partitions × log.retention.bytes
+#   Example:
+#     log.retention.hours=3
+#     log.retention.bytes=1027604480 (1GB)
+#     segment.bytes=134217728 (128MB)
+#     log.segment.delete.delay.ms=30000 (30 seconds)
+#   44 partitions * 1027604480 bytes = 45214597120 bytes = 45.214597120 GB
+#   So a disk of at least 50GB is required for 44 partitions
+# -----------------------------------------------
+
+# Start Kafka
+KAFKA_HEAP_OPTS="${kafka_heap_opts}" bin/kafka-server-start.sh config/server.properties \
+    --override log.retention.hours=${log_retention_hours} \
+    --override log.retention.bytes=${log_retention_bytes} \
+    --override segment.bytes=${segment_bytes} \
+    --override log.segment.delete.delay.ms=${log_segment_delete_delay_ms} \
+    --override num.network.threads=8 \
+    --override num.io.threads=8 \
+    --override queued.max.requests=1000 \
+    --override socket.request.max.bytes=104857600 \
+    --override message.max.bytes=2097152 \
+    --override replica.fetch.max.bytes=2097152 &> /home/ubuntu/kafka-server.logs &
+
+echo "⏳ Waiting for Kafka to start..."
+until nc -zv 127.0.0.1 9092; do sleep 2; done
+
+# Loop through the topics using terraform map keys
+%{ for topic_name, partitions in kafka_topics }
+bin/kafka-topics.sh \
+    --create \
+    --topic "${topic_name}" \
+    --partitions "${partitions}" \
+    --replication-factor 1 \
+    --bootstrap-server 127.0.0.1:9092
+%{ endfor }
+
+echo "✅ Kafka installation and configuration is complete"
+
+# -----------------------------------------------
+# Install & Configure Monitoring Agents & Scripts
+# -----------------------------------------------
+
+# Allow commands to fail without stopping the script as all steps below 
+# are only for monitoring setup which is not critical to Kafka setup
+set +e
+
+# Download custom cloudwatch agent configuration to export essential infrastructure metrics from S3
+aws s3 cp ${cloudwatch_config_s3_uri} /home/ubuntu/cwa_config.json
+
+# Install the AWS CloudWatch Agent
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+
+# Import custom cloudwatch agent configuration
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/home/ubuntu/cwa_config.json
+
+# Prepare python environment to execute the script
+pip3 install statsd pandas jq
+
+# Download custom python script to export Kafka consumer group metrics to cloudwatch from S3
+aws s3 cp ${statsd_script_s3_uri} /home/ubuntu/metrics_statsd.py
+
+cd /home/ubuntu
+
+# Run the metrics script in background
+python3 /home/ubuntu/metrics_statsd.py &> /home/ubuntu/metrics_statsd.logs &
+
+echo "✅ Kafka setup is complete"
