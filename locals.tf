@@ -1,12 +1,13 @@
 locals {
   common_tags = {
     Stage    = var.environment
-    Team     = "credeau-devops"
+    Owner    = var.stack_owner
+    Team     = var.stack_team
     Pipeline = var.application
-    Owner    = "harshit.sharma@credeau.com"
+    Org      = var.organization
   }
 
-  common_name = format("%s-kafka-%s", var.application, var.environment)
+  stack_identifier = format("%s-kafka-%s", var.application, var.environment)
 
   # -----------------------------------------------
   # Kafka Storage Configurations

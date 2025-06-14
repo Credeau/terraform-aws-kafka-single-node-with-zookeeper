@@ -40,7 +40,7 @@ resource "aws_instance" "kafka" {
   user_data_replace_on_change = false
 
   tags = merge(local.common_tags, {
-    Name         = local.common_name,
+    Name         = local.stack_identifier,
     ResourceType = "database"
   })
 }

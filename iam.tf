@@ -1,12 +1,12 @@
 resource "aws_iam_instance_profile" "kafka" {
-  name = format("%s-profile", local.common_name)
+  name = format("%s-profile", local.stack_identifier)
   role = aws_iam_role.main.name
 
   tags = local.common_tags
 }
 
 resource "aws_iam_role" "main" {
-  name = format("%s-role", local.common_name)
+  name = format("%s-role", local.stack_identifier)
 
   assume_role_policy = <<-EOF
   {

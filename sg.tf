@@ -1,5 +1,5 @@
 resource "aws_security_group" "kafka" {
-  name        = format("%s-sg", local.common_name)
+  name        = format("%s-sg", local.stack_identifier)
   description = "Security group for Kafka instance"
   vpc_id      = var.vpc_id
 
@@ -32,7 +32,7 @@ resource "aws_security_group" "kafka" {
   }
 
   tags = {
-    Name         = format("%s-sg", local.common_name),
+    Name         = format("%s-sg", local.stack_identifier),
     ResourceType = "security"
   }
 }

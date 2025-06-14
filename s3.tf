@@ -1,9 +1,17 @@
+resource "random_string" "suffix" {
+  length  = 6
+  upper   = false
+  lower   = true
+  numeric = true
+  special = false
+}
+
 resource "aws_s3_bucket" "kafka_assets" {
-  bucket        = format("%s-assets", local.common_name)
+  bucket        = format("%s-assets-%s", local.stack_identifier, random_string.suffix.result)
   force_destroy = true
 
   tags = merge(local.common_tags, {
-    Name         = format("%s-assets", local.common_name),
+    Name         = format("%s-assets", local.stack_identifier),
     ResourceType = "storage"
   })
 }
@@ -30,7 +38,7 @@ resource "aws_s3_object" "cloudwatch_agent_config" {
   key    = "config/cwa_config.json"
 
   content = templatefile("${path.module}/configs/cwa_config.json", {
-    application_identifier = local.common_name
+    application_identifier = local.stack_identifier
   })
 
   content_type = "text/plain"

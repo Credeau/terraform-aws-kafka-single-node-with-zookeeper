@@ -13,7 +13,7 @@ output "host_address" {
 
 # Common application-specific identifier used for tagging and metric grouping
 output "application_identifier" {
-  value = local.common_name
+  value = local.stack_identifier
 }
 
 # Availability zone in which the Kafka resources are deployed

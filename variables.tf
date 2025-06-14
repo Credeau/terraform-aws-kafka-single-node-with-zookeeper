@@ -1,10 +1,10 @@
 # ----------------------------------------------
 # Deployment Environment Related Variables
 # ----------------------------------------------
-variable "region" {
+variable "application" {
   type        = string
-  description = "AWS operational region"
-  default     = "ap-south-1"
+  description = "Application name for which this database is provisioned"
+  default     = "dummy"
 }
 
 variable "environment" {
@@ -18,10 +18,34 @@ variable "environment" {
   }
 }
 
-variable "application" {
+variable "region" {
   type        = string
-  description = "Application name for which this database is provisioned"
-  default     = "dummy"
+  description = "AWS operational region"
+  default     = "ap-south-1"
+}
+
+variable "stack_owner" {
+  type        = string
+  description = "owner of the stack"
+  default     = "tech@credeau.com"
+}
+
+variable "stack_team" {
+  type        = string
+  description = "team of the stack"
+  default     = "devops"
+}
+
+variable "organization" {
+  type        = string
+  description = "organization name"
+  default     = "credeau"
+}
+
+variable "alert_email_recipients" {
+  type        = list(string)
+  description = "email recipients for sns alerts"
+  default     = []
 }
 
 # ----------------------------------------------
