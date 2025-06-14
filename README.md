@@ -3,13 +3,14 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.7 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0, < 2.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -32,6 +33,9 @@ No modules.
 | [aws_s3_object.kafka_service](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [aws_s3_object.zookeeper_service](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [aws_security_group.kafka](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_sns_topic.alert_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
+| [aws_sns_topic_subscription.email_subscriptions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
+| [random_string.suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
 | [aws_ami.ubuntu](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
 | [aws_subnet.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
 
@@ -39,6 +43,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_alert_email_recipients"></a> [alert\_email\_recipients](#input\_alert\_email\_recipients) | email recipients for sns alerts | `list(string)` | `[]` | no |
 | <a name="input_ami_id"></a> [ami\_id](#input\_ami\_id) | AMI ID to use for Kafka (if not specified latest ubuntu 22.04 image is used) | `string` | `null` | no |
 | <a name="input_application"></a> [application](#input\_application) | Application name for which this database is provisioned | `string` | `"dummy"` | no |
 | <a name="input_delete_storage_on_termination"></a> [delete\_storage\_on\_termination](#input\_delete\_storage\_on\_termination) | Enable/Disable the deletion of Kafka storage on instance termination | `bool` | `true` | no |
@@ -57,10 +62,13 @@ No modules.
 | <a name="input_kafka_whitelisted_cidrs"></a> [kafka\_whitelisted\_cidrs](#input\_kafka\_whitelisted\_cidrs) | List of CIDR block IP ranges to allow connecting with Kafka (port: 9092) | `list(string)` | `[]` | no |
 | <a name="input_kafka_whitelisted_sg_ids"></a> [kafka\_whitelisted\_sg\_ids](#input\_kafka\_whitelisted\_sg\_ids) | List of Security Group IDs to allow connecting with Kafka (port: 9092) | `list(string)` | `[]` | no |
 | <a name="input_key_pair_name"></a> [key\_pair\_name](#input\_key\_pair\_name) | SSH key pair to use for system access | `string` | n/a | yes |
+| <a name="input_organization"></a> [organization](#input\_organization) | organization name | `string` | `"credeau"` | no |
 | <a name="input_private_subnet_id"></a> [private\_subnet\_id](#input\_private\_subnet\_id) | VPC Subnet ID to launch the server network | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS operational region | `string` | `"ap-south-1"` | no |
 | <a name="input_ssh_whitelisted_cidrs"></a> [ssh\_whitelisted\_cidrs](#input\_ssh\_whitelisted\_cidrs) | List of CIDR block IP ranges to allow SSH on Kafka instance (port: 22) | `list(string)` | `[]` | no |
 | <a name="input_ssh_whitelisted_sg_ids"></a> [ssh\_whitelisted\_sg\_ids](#input\_ssh\_whitelisted\_sg\_ids) | List of Security Group IDs to allow SSH on Kafka instance (port: 22) | `list(string)` | `[]` | no |
+| <a name="input_stack_owner"></a> [stack\_owner](#input\_stack\_owner) | owner of the stack | `string` | `"tech@credeau.com"` | no |
+| <a name="input_stack_team"></a> [stack\_team](#input\_stack\_team) | team of the stack | `string` | `"devops"` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID of the VPC to provision the resources in | `string` | n/a | yes |
 
 ## Outputs
