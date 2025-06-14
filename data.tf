@@ -1,6 +1,6 @@
 # Fetch properties of passed Subnet ID
 data "aws_subnet" "main" {
-  id = var.private_subnet_id
+  id = var.subnet_id
 }
 
 # Fetch latest Ubuntu 22.04 AMI

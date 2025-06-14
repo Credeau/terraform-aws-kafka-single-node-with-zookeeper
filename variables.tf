@@ -57,7 +57,7 @@ variable "vpc_id" {
   description = "VPC ID of the VPC to provision the resources in"
 }
 
-variable "private_subnet_id" {
+variable "subnet_id" {
   type        = string
   description = "VPC Subnet ID to launch the server network"
 }
