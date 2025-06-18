@@ -37,8 +37,17 @@ tar -xzf kafka_2.13-3.8.0.tgz
 
 cd kafka_2.13-3.8.0/
 
-# Start Zookeeper
-bin/zookeeper-server-start.sh config/zookeeper.properties &> /home/ubuntu/zookeeper.logs &
+# Download & Configure Zookeeper Service
+aws s3 cp ${zookeeper_service_s3_uri} /etc/systemd/system/zookeeper.service
+
+# Download & Configure Kafka Service
+aws s3 cp ${kafka_service_s3_uri} /etc/systemd/system/kafka.service
+
+sudo systemctl daemon-reload
+
+# Enable & Start Zookeeper service
+sudo systemctl enable zookeeper.service
+sudo systemctl start zookeeper.service
 
 # -----------------------------------------------
 # Kafka Configuration Tips
@@ -54,18 +63,9 @@ bin/zookeeper-server-start.sh config/zookeeper.properties &> /home/ubuntu/zookee
 #   So a disk of at least 50GB is required for 44 partitions
 # -----------------------------------------------
 
-# Start Kafka
-KAFKA_HEAP_OPTS="${kafka_heap_opts}" bin/kafka-server-start.sh config/server.properties \
-    --override log.retention.hours=${log_retention_hours} \
-    --override log.retention.bytes=${log_retention_bytes} \
-    --override segment.bytes=${segment_bytes} \
-    --override log.segment.delete.delay.ms=${log_segment_delete_delay_ms} \
-    --override num.network.threads=8 \
-    --override num.io.threads=8 \
-    --override queued.max.requests=1000 \
-    --override socket.request.max.bytes=104857600 \
-    --override message.max.bytes=2097152 \
-    --override replica.fetch.max.bytes=2097152 &> /home/ubuntu/kafka-server.logs &
+# Enable & Start Kafka service
+sudo systemctl enable kafka.service
+sudo systemctl start kafka.service
 
 echo "⏳ Waiting for Kafka to start..."
 until nc -zv 127.0.0.1 9092; do sleep 2; done
