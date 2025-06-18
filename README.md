@@ -20,6 +20,9 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [aws_cloudwatch_metric_alarm.cpu_usage](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.disk_usage](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
+| [aws_cloudwatch_metric_alarm.memory_usage](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm) | resource |
 | [aws_iam_instance_profile.kafka](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
 | [aws_iam_role.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.kafka](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
@@ -46,10 +49,12 @@ No modules.
 | <a name="input_alert_email_recipients"></a> [alert\_email\_recipients](#input\_alert\_email\_recipients) | email recipients for sns alerts | `list(string)` | `[]` | no |
 | <a name="input_ami_id"></a> [ami\_id](#input\_ami\_id) | AMI ID to use for Kafka (if not specified latest ubuntu 22.04 image is used) | `string` | `null` | no |
 | <a name="input_application"></a> [application](#input\_application) | Application name for which this database is provisioned | `string` | `"dummy"` | no |
+| <a name="input_cpu_threshold"></a> [cpu\_threshold](#input\_cpu\_threshold) | CPU usage threshold for alerts | `number` | `60` | no |
 | <a name="input_delete_storage_on_termination"></a> [delete\_storage\_on\_termination](#input\_delete\_storage\_on\_termination) | Enable/Disable the deletion of Kafka storage on instance termination | `bool` | `true` | no |
 | <a name="input_disk_iops"></a> [disk\_iops](#input\_disk\_iops) | IOPS to provision in Kafka storage | `number` | `3000` | no |
 | <a name="input_disk_size"></a> [disk\_size](#input\_disk\_size) | Size in GBs to provision as kafka storage | `number` | `25` | no |
-| <a name="input_disk_throughput"></a> [disk\_throughput](#input\_disk\_throughput) | Throughput to provision in Kafka storage | `number` | `250` | no |
+| <a name="input_disk_threshold"></a> [disk\_threshold](#input\_disk\_threshold) | Disk usage threshold for alerts | `number` | `60` | no |
+| <a name="input_disk_throughput"></a> [disk\_throughput](#input\_disk\_throughput) | Throughput to provision in Kafka storage | `number` | `125` | no |
 | <a name="input_encrypt_storage"></a> [encrypt\_storage](#input\_encrypt\_storage) | Enable/Disable the encryption of Kafka storage | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Provisioning environment | `string` | `"dev"` | no |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | Type of instance to provision for Kafka | `string` | `"t3a.large"` | no |
@@ -62,13 +67,14 @@ No modules.
 | <a name="input_kafka_whitelisted_cidrs"></a> [kafka\_whitelisted\_cidrs](#input\_kafka\_whitelisted\_cidrs) | List of CIDR block IP ranges to allow connecting with Kafka (port: 9092) | `list(string)` | `[]` | no |
 | <a name="input_kafka_whitelisted_sg_ids"></a> [kafka\_whitelisted\_sg\_ids](#input\_kafka\_whitelisted\_sg\_ids) | List of Security Group IDs to allow connecting with Kafka (port: 9092) | `list(string)` | `[]` | no |
 | <a name="input_key_pair_name"></a> [key\_pair\_name](#input\_key\_pair\_name) | SSH key pair to use for system access | `string` | n/a | yes |
+| <a name="input_memory_threshold"></a> [memory\_threshold](#input\_memory\_threshold) | Memory usage threshold for alerts | `number` | `60` | no |
 | <a name="input_organization"></a> [organization](#input\_organization) | organization name | `string` | `"credeau"` | no |
-| <a name="input_private_subnet_id"></a> [private\_subnet\_id](#input\_private\_subnet\_id) | VPC Subnet ID to launch the server network | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS operational region | `string` | `"ap-south-1"` | no |
 | <a name="input_ssh_whitelisted_cidrs"></a> [ssh\_whitelisted\_cidrs](#input\_ssh\_whitelisted\_cidrs) | List of CIDR block IP ranges to allow SSH on Kafka instance (port: 22) | `list(string)` | `[]` | no |
 | <a name="input_ssh_whitelisted_sg_ids"></a> [ssh\_whitelisted\_sg\_ids](#input\_ssh\_whitelisted\_sg\_ids) | List of Security Group IDs to allow SSH on Kafka instance (port: 22) | `list(string)` | `[]` | no |
 | <a name="input_stack_owner"></a> [stack\_owner](#input\_stack\_owner) | owner of the stack | `string` | `"tech@credeau.com"` | no |
 | <a name="input_stack_team"></a> [stack\_team](#input\_stack\_team) | team of the stack | `string` | `"devops"` | no |
+| <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | VPC Subnet ID to launch the server network | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC ID of the VPC to provision the resources in | `string` | n/a | yes |
 
 ## Outputs
