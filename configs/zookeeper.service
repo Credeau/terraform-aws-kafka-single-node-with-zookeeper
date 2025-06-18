@@ -4,10 +4,12 @@ After=network.target
 
 [Service]
 Type=simple
+User=ubuntu
+Group=ubuntu
 ExecStart=/opt/kafka/bin/zookeeper-server-start.sh /opt/kafka/config/zookeeper.properties
 ExecStop=/opt/kafka/bin/zookeeper-server-stop.sh
-User=ubuntu
-Restart=always
+Restart=on-failure
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target

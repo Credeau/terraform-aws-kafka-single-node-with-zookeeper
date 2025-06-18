@@ -1,13 +1,17 @@
 [Unit]
 Description=Apache Kafka
-After=zookeeper.service
+After=network.target zookeeper.service
 
 [Service]
 Type=simple
+User=ubuntu
+Group=ubuntu
 Environment="KAFKA_HEAP_OPTS=${kafka_heap_opts}"
 ExecStart=/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties \
-  --override log.retention.hours=12 \
-  --override log.retention.bytes=4294967296 \
+  --override log.retention.hours=${log_retention_hours} \
+  --override log.retention.bytes=${log_retention_bytes} \
+  --override segment.bytes=${segment_bytes} \
+  --override log.segment.delete.delay.ms=${log_segment_delete_delay_ms} \
   --override num.network.threads=8 \
   --override num.io.threads=8 \
   --override queued.max.requests=1000 \
@@ -15,8 +19,8 @@ ExecStart=/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properti
   --override message.max.bytes=2097152 \
   --override replica.fetch.max.bytes=2097152
 ExecStop=/opt/kafka/bin/kafka-server-stop.sh
-User=ubuntu
-Restart=always
+Restart=on-failure
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
