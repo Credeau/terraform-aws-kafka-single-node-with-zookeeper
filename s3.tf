@@ -50,7 +50,11 @@ resource "aws_s3_object" "kafka_service" {
   key    = "config/kafka.service"
 
   content = templatefile("${path.module}/configs/kafka.service", {
-    kafka_heap_opts = var.kafka_heap_opts
+    kafka_heap_opts             = var.kafka_heap_opts
+    log_retention_hours         = local.log_retention_hours
+    log_retention_bytes         = local.log_retention_bytes
+    segment_bytes               = local.segment_bytes
+    log_segment_delete_delay_ms = local.log_segment_delete_delay_ms
   })
 
   content_type = "text/plain"

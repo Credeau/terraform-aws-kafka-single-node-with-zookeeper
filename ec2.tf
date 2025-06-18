@@ -31,13 +31,15 @@ resource "aws_instance" "kafka" {
     kafka_topics                = var.kafka_topic_config
     cloudwatch_config_s3_uri    = format("s3://%s/%s", aws_s3_bucket.kafka_assets.bucket, aws_s3_object.cloudwatch_agent_config.key)
     statsd_script_s3_uri        = format("s3://%s/%s", aws_s3_bucket.kafka_assets.bucket, aws_s3_object.kafka_cloudwatch_script.key)
+    kafka_service_s3_uri        = format("s3://%s/%s", aws_s3_bucket.kafka_assets.bucket, aws_s3_object.kafka_service.key)
+    zookeeper_service_s3_uri    = format("s3://%s/%s", aws_s3_bucket.kafka_assets.bucket, aws_s3_object.zookeeper_service.key)
     log_retention_bytes         = local.log_retention_bytes
     log_retention_hours         = local.log_retention_hours
     segment_bytes               = local.segment_bytes
     log_segment_delete_delay_ms = local.log_segment_delete_delay_ms
   })
 
-  user_data_replace_on_change = false
+  user_data_replace_on_change = true
 
   tags = merge(local.common_tags, {
     Name         = local.stack_identifier,
