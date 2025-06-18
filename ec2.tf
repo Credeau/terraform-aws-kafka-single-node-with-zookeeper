@@ -39,7 +39,7 @@ resource "aws_instance" "kafka" {
     log_segment_delete_delay_ms = local.log_segment_delete_delay_ms
   })
 
-  user_data_replace_on_change = false
+  user_data_replace_on_change = true
 
   tags = merge(local.common_tags, {
     Name         = local.stack_identifier,
