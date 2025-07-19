@@ -67,10 +67,17 @@ while True:
         if df is not None:
             print(df)
 
+            total_lags = {}
+
             for row_i in range(df.shape[0]):
                 row = df.iloc[row_i]
 
                 lag = safe_int(row.get("log-end-offset", 0)) - safe_int(row.get("current-offset", 0))
+
+                if f'topic.{row.group}.{row.topic}.lag' in total_lags:
+                    total_lags[f'topic.{row.group}.{row.topic}.lag'] += lag
+                else:
+                    total_lags[f'topic.{row.group}.{row.topic}.lag'] = lag
 
                 statsd_client.gauge(
                     f'topic.{row.group}.{row.topic}.partition{row.partition}.lag',
@@ -85,6 +92,12 @@ while True:
                 statsd_client.gauge(
                     f'topic.{row.group}.{row.topic}.partition{row.partition}.receivedoffset',
                     safe_int(row["log-end-offset"])
+                )
+
+            for topic, lag in total_lags.items():
+                statsd_client.gauge(
+                    topic,
+                    lag
                 )
 
     time.sleep(1)
