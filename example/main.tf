@@ -1,5 +1,5 @@
 module "kafka" {
-  source = "git::https://github.com/credeau/terraform-aws-kafka-single-node-with-zookeeper.git?ref=v1.0.1"
+  source = "git::https://github.com/credeau/terraform-aws-kafka-single-node-with-zookeeper.git?ref=v1.0.2"
 
   application                   = "mobile-forge"
   environment                   = "prod"
