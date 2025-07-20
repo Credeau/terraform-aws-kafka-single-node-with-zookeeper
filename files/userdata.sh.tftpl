@@ -113,6 +113,6 @@ aws s3 cp ${statsd_script_s3_uri} /home/ubuntu/metrics_statsd.py
 cd /home/ubuntu
 
 # Run the metrics script in background
-python3 /home/ubuntu/metrics_statsd.py &> /home/ubuntu/metrics_statsd.logs &
+nohup python3 /home/ubuntu/metrics_statsd.py > /home/ubuntu/metrics_statsd.logs 2>&1 &
 
 echo "✅ Kafka setup is complete"
