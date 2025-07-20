@@ -10,7 +10,7 @@ import statsd
 statsd_client = statsd.StatsClient(host='localhost', port=8125, prefix=None)
 
 # Define the command to collect consumer group metrics
-BIN = "kafka_2.13-3.8.0/bin/kafka-consumer-groups.sh"
+BIN = "/opt/kafka/bin/kafka-consumer-groups.sh"
 
 # Define the consumer groups to collect metrics for
 CONSUMER_GROUPS = [
