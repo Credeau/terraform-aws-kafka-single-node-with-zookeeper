@@ -51,7 +51,10 @@ No modules.
 | <a name="input_application"></a> [application](#input\_application) | Application name for which this database is provisioned | `string` | `"dummy"` | no |
 | <a name="input_cpu_threshold"></a> [cpu\_threshold](#input\_cpu\_threshold) | CPU usage threshold for alerts | `number` | `60` | no |
 | <a name="input_delete_storage_on_termination"></a> [delete\_storage\_on\_termination](#input\_delete\_storage\_on\_termination) | Enable/Disable the deletion of Kafka storage on instance termination | `bool` | `true` | no |
+| <a name="input_disk_device_name"></a> [disk\_device\_name](#input\_disk\_device\_name) | Device name of the disk | `string` | `"nvme0n1p1"` | no |
+| <a name="input_disk_fs_type"></a> [disk\_fs\_type](#input\_disk\_fs\_type) | File system type of the disk | `string` | `"ext4"` | no |
 | <a name="input_disk_iops"></a> [disk\_iops](#input\_disk\_iops) | IOPS to provision in Kafka storage | `number` | `3000` | no |
+| <a name="input_disk_mount_path"></a> [disk\_mount\_path](#input\_disk\_mount\_path) | Path on which the disk is mounted | `string` | `"/"` | no |
 | <a name="input_disk_size"></a> [disk\_size](#input\_disk\_size) | Size in GBs to provision as kafka storage | `number` | `25` | no |
 | <a name="input_disk_threshold"></a> [disk\_threshold](#input\_disk\_threshold) | Disk usage threshold for alerts | `number` | `60` | no |
 | <a name="input_disk_throughput"></a> [disk\_throughput](#input\_disk\_throughput) | Throughput to provision in Kafka storage | `number` | `125` | no |
