@@ -174,6 +174,24 @@ variable "delete_storage_on_termination" {
   default     = true
 }
 
+variable "disk_mount_path" {
+  type = string
+  description = "Path on which the disk is mounted"
+  default = "/"
+}
+
+variable "disk_device_name" {
+  type = string
+  description = "Device name of the disk"
+  default = "nvme0n1p1"
+}
+
+variable "disk_fs_type" {
+  type = string
+  description = "File system type of the disk"
+  default = "ext4"
+}
+
 # ----------------------------------------------
 # Kafka Related Variables
 # ----------------------------------------------

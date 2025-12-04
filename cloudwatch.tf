@@ -48,9 +48,16 @@ resource "aws_cloudwatch_metric_alarm" "disk_usage" {
   period              = 60
   statistic           = "Average"
   threshold           = var.disk_threshold
+  treat_missing_data  = "breaching"
+  datapoints_to_alarm = 1
 
   dimensions = {
-    InstanceId = aws_instance.kafka.id
+    path         = var.disk_mount_path
+    InstanceId   = aws_instance.kafka.id
+    ImageId      = data.aws_instance.kafka.ami
+    InstanceType = data.aws_instance.kafka.instance_type
+    device       = var.disk_device_name
+    fstype       = var.disk_fs_type
   }
 
   alarm_actions = [
